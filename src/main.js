@@ -3,25 +3,28 @@ import VueRouter from 'vue-router'
 import App from './App.vue'
 
 import Profile from './views/Profile'
+import ExternalApi from './views/ExternalApi'
 import Home from './views/Home'
 
-import { domain, clientId } from "../auth-config.json";
+import { domain, clientId, audience } from "../auth-config.json";
 import { Auth0Plugin } from "./auth";
 import { authGuard } from './auth/authGuard'
 
-const routes = [
-  { path: "/", component: Home },
-  { path: "/profile", component: Profile, beforeEnter: authGuard}
-]
 let router = new VueRouter({
   mode: 'history',
-  routes
+  routes: [
+    { path: "/", component: Home },
+    { path: "/profile", component: Profile, beforeEnter: authGuard },
+    { path: "/external-api", component: ExternalApi, beforeEnter: authGuard }
+  ]
 })
+
 Vue.use(VueRouter)
 // Install the authentication plugin here
 Vue.use(Auth0Plugin, {
   domain,
   clientId,
+  audience,
   onRedirectCallback: appState => {
     router.push(
       appState && appState.targetUrl
