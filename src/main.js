@@ -7,10 +7,11 @@ import Home from './views/Home'
 
 import { domain, clientId } from "../auth-config.json";
 import { Auth0Plugin } from "./auth";
+import { authGuard } from './auth/authGuard'
 
 const routes = [
   { path: "/", component: Home },
-  { path: "/profile", component: Profile}
+  { path: "/profile", component: Profile, beforeEnter: authGuard}
 ]
 let router = new VueRouter({
   mode: 'history',
