@@ -51,19 +51,16 @@ ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  padding-bottom: 5%;
+  padding-bottom: 2%;
 }
 li {
   font-weight: bold;
 }
 /* Class tags */
 .detailsHeading {
-  text-align: left;;
+  text-align: left;
   font-weight: normal;
   font-style: italic;
 }
 /* ID tags */
-#additionalNotes {
-  text-align: left;
-}
 </style>
