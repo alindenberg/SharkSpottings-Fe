@@ -1,28 +1,30 @@
 <template>
-  <b-container fluid id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link>
-      <router-link to="/create-sighting">Create Sighting</router-link>
-      <router-link  to="/profile" v-if="$auth.isAuthenticated">Profile</router-link>
-      <router-link to="/external-api">External Api</router-link>
-    </div>
-    <router-view />
-  </b-container>
+  <div>
+    <navbar></navbar>
+    <b-container fluid id="app">
+      <router-view />
+    </b-container>
+  </div>
 </template>
 
 <script>
-
+import NavBar from "./components/Navbar"
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    navbar: NavBar
+  }
 }
 </script>
 
 <style>
+html, #app {
+  background-color: #80d4ff;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  /* margin-top: 60px; */
+  padding-top: 2%;
 }
 </style>

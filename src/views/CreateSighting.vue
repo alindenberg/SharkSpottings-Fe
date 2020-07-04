@@ -4,7 +4,6 @@
       <h5 v-if="formError">{{formError}}</h5>
       <b-form @submit="onSubmit" @reset="onReset" v-if="show">
         <section id="sharkDetails">
-          <!-- <h6>Shark Details</h6> -->
           <!-- TYPE -->
           <b-form-group label="Type:" label-for="shark-type-input">
               <b-form-select
@@ -25,7 +24,6 @@
         </section>
 
         <section id="sightingDetails">
-          <!-- <h6>Sighting Details</h6> -->
           <!-- CITY -->
           <b-form-group label="City:" label-for="shark-city-input">
               <b-form-input
@@ -65,7 +63,6 @@
         </section>
 
         <section>
-          <!-- <h6>Additional Details</h6> -->
           <b-form-group label="Additional Details:" label-for="shark-additional-details-input">
             <b-form-textarea
               id="shark-additional-details-input"
@@ -78,8 +75,8 @@
         </section>
 
         <section>
-          <b-form-row>
-            <b-button type="submit" v-on:click="submit">Submit</b-button>
+          <b-form-row class="justify-content-center">
+            <b-button type="submit" variant="primary" v-on:click="submit">Submit</b-button>
           </b-form-row>
         </section>
       </b-form>
@@ -108,7 +105,7 @@ export default {
         },
       },
       show: true,
-      sharkTypes: [{ text: 'Select One', value: null }, 'Great White Shark', 'Bull Shark', 'Tiger Shark', 'Hammerhead Shark'],
+      sharkTypes: [{ text: 'Select One', value: null }],
       formError: ''
     }
   },
@@ -119,6 +116,7 @@ export default {
           console.log(err)
           this.formError = err;
         })
+        this.$router.push('/')
       },
       onReset(evt) {
         evt.preventDefault()
@@ -134,11 +132,24 @@ export default {
           this.show = true
         })
       }
+  },
+  created() {
+    Axios.get(`${process.env.VUE_APP_API_URL}/sharkTypes`).then(res => {
+      this.sharkTypes.push(...res.data)
+    }).catch(err => this.formError = err)
   }
 }
 </script>
 
 <style scoped>
+form {
+  padding: 1% 1% 1% 1%;
+  border-radius: 15px;
+  background-color: white;
+}
+section {
+  margin: 2%;
+}
 .form-row {
   display: flex;
   align-items: center;
