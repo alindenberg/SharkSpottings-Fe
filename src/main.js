@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import { BootstrapVue } from 'bootstrap-vue'
+import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
 import App from './App.vue'
 // Bootstrap CSS
 import 'bootstrap/dist/css/bootstrap.css'
@@ -41,6 +41,7 @@ Vue.config.productionTip = false
 
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
+Vue.use(BootstrapVueIcons)
 Vue.use(Auth0Plugin, authOptions);
 new Vue({
   router,
