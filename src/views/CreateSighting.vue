@@ -131,14 +131,15 @@ export default {
     };
   },
   methods: {
-    onSubmit(evt) {
+    async onSubmit(evt) {
       evt.preventDefault();
-      Axios.post(`${process.env.VUE_APP_API_URL}/sightings`, this.form).catch(
-        err => {
-          console.log(err);
-          this.formError = err;
-        }
-      );
+
+      const token = await this.$auth.getTokenSilently();
+
+      Axios.post(`${process.env.VUE_APP_API_URL}/sightings`, this.form, {
+        headers: { Authorization: `Bearer ${token}` }
+      }).catch(err => (this.formError = err));
+
       this.$router.push("/");
     },
     onReset(evt) {

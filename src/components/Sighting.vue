@@ -9,21 +9,18 @@
             </u>
             <ul>
               <li>Size: {{sighting.sharkDetails.size}} ft.</li>
-              <li>Spotted at {{sighting.sightingDetails.time}}</li>
+              <li>Spotted at {{this.formatTime(sighting.sightingDetails.time)}}</li>
               <li
                 v-if="sighting.sightingDetails.beach != null"
               >Beach: {{sighting.sightingDetails.beach}}</li>
-              <li>{{sighting.sightingDetails.distanceFromShore}} from shore</li>
+              <li>{{sighting.sightingDetails.distanceFromShore}} yards from shore</li>
             </ul>
           </section>
-          <section v-if="!sighting.sightingDetails.additionalNotes" id="additionalNotes">
+          <section v-if="sighting.sightingDetails.additionalNotes" id="additionalNotes">
             <u>
               <h6 class="detailsHeading">Additional Notes</h6>
             </u>
-            <p>
-              {{sighting.sightingDetails.additionalNotes}}
-              The shark was very mysterious as it circled me about 6 times. It never made any aggressive moves but mainly just looked curious. Still, a frightening encounter that makes one feel tiny.
-            </p>
+            <p>{{sighting.sightingDetails.additionalNotes}}</p>
           </section>
         </b-col>
       </b-row>
@@ -53,6 +50,19 @@ export default {
     isAuthor: function() {
       // TODO
       return true;
+    }
+  },
+  methods: {
+    formatTime(time) {
+      let hour = Number(String(time).substring(0, 2));
+      if (hour > 12) {
+        time = `${hour - 12}${time.substring(2)} PM`;
+      } else if (hour == 12) {
+        time = String(time).concat(" PM");
+      } else {
+        time = String(time).concat(" AM");
+      }
+      return time;
     }
   }
 };
