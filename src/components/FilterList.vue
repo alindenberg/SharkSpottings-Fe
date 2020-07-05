@@ -2,12 +2,6 @@
   <div>
     <b-btn v-show="!isCollapsed" variant="link" v-b-toggle.filters>
       <b-icon icon="arrow-left"></b-icon>Filters
-      <!-- <strong v-if="isCollapsed" aria-hidden="true" class="ml-auto">
-        <b-icon icon="arrow-up"></b-icon>
-      </strong>
-      <strong v-else aria-hidden="true" class="ml-auto">
-        <b-icon icon="arrow-down"></b-icon>
-      </strong>-->
     </b-btn>
     <b-sidebar v-model="isCollapsed" right id="filters">
       <b-form @submit="onSubmit" @reset="onReset">
@@ -23,10 +17,39 @@
           </b-form-group>
         </b-form-group>
         <!-- CITY FILTER -->
-        <div>
-          <label for="city-filters">Cities:</label>
-          <b-form-tags input-id="city-filters" v-model="cityFilters" class="mb-2"></b-form-tags>
-        </div>
+        <!-- <b-form-group label="City:"> -->
+        <!-- <b-form-tags
+            placeholder="Enter city search string"
+            input-id="city-filters"
+            v-model="cityFilters"
+            class="mb-2"
+        ></b-form-tags>-->
+        <b-form-group label="City:" label-for="shark-city-input">
+          <b-row class="align-items-center">
+            <b-col sm="10">
+              <google-places
+                class="autocomplete form-control"
+                types="(cities)"
+                country="us"
+                ref="city"
+                id="autocomplete"
+                placeholder="Enter a city"
+                v-on:placechanged="onPlaceChanged"
+              />
+            </b-col>
+            <b-col sm="1">
+              <b-icon icon="plus-circle" @click="onCityAdded" />
+            </b-col>
+          </b-row>
+        </b-form-group>
+        <section>
+          <b-row class="justify-content-center" id="cityFilters">
+            <b-btn size="sm" id="cityTagBtn" v-for="(city, index) in cityFilters" :key="index">
+              {{city}}
+              <b-icon @click="cityFilters.splice(index, 1)" icon="x-circle" />
+            </b-btn>
+          </b-row>
+        </section>
         <!-- SUBMIT -->
         <section id="submit">
           <b-row class="justify-content-center">
@@ -40,9 +63,13 @@
 
 <script>
 import Axios from "axios";
+import VueGoogleAutocomplete from "vue-google-autocomplete";
 import SharkTypeJson from "../assets/sharkTypes.json";
 export default {
   name: "FilterList",
+  components: {
+    "google-places": VueGoogleAutocomplete
+  },
   data() {
     return {
       isCollapsed: false,
@@ -57,15 +84,24 @@ export default {
     }
   },
   methods: {
+    onPlaceChanged(address) {
+      this.selectedCity =
+        address.locality + ", " + address.administrative_area_level_1;
+    },
+    onCityAdded() {
+      this.cityFilters.push(this.selectedCity);
+      this.$refs.city.clear();
+      this.selectedCity = null;
+    },
     onSubmit(evt) {
       evt.preventDefault();
 
       let queryString = "?";
       if (this.cityFilters.length > 0) {
-        queryString += `cities=${this.cityFilters.join(",")}&`;
+        queryString += `cities=${this.cityFilters.join(";")}&`;
       }
       if (this.sharkTypesSelected.length > 0) {
-        queryString += `sharkTypes=${this.sharkTypesSelected.join(",")}&`;
+        queryString += `sharkTypes=${this.sharkTypesSelected.join(";")}&`;
       }
       Axios.get(`${process.env.VUE_APP_API_URL}/sightings${queryString}`).then(
         res => {
@@ -85,8 +121,12 @@ export default {
 }
 form {
   margin: 2%;
+  overflow: hidden;
 }
 #submit {
   margin-top: 2%;
+}
+#cityTagBtn {
+  margin: 1%;
 }
 </style>

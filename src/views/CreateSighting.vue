@@ -28,6 +28,16 @@
         <section id="sightingDetails">
           <!-- CITY -->
           <b-form-group label="City:" label-for="shark-city-input">
+            <google-places
+              class="autocomplete form-control"
+              types="(cities)"
+              country="us"
+              id="autocomplete"
+              placeholder="Enter a city"
+              v-on:placechanged="onPlaceChanged"
+            />
+          </b-form-group>
+          <!-- <b-form-group label="City:" label-for="shark-city-input">
             <b-form-input
               id="shark-city-input"
               v-model="form.sightingDetails.city"
@@ -35,7 +45,7 @@
               placeholder="Ex: San Diego, CA"
               type="text"
             />
-          </b-form-group>
+          </b-form-group>-->
 
           <!-- DATE -->
           <b-form-group label="Date:" label-for="shark-date-input">
@@ -92,9 +102,13 @@
 
 <script>
 import Axios from "axios";
+import VueGoogleAutocomplete from "vue-google-autocomplete";
 import SharkTypeJson from "../assets/sharkTypes.json";
 export default {
   name: "CreateSighting",
+  components: {
+    "google-places": VueGoogleAutocomplete
+  },
   data() {
     return {
       form: {
@@ -140,6 +154,10 @@ export default {
       this.$nextTick(() => {
         this.show = true;
       });
+    },
+    onPlaceChanged(address) {
+      this.form.sightingDetails.city =
+        address.locality + ", " + address.administrative_area_level_1;
     }
   },
   created() {
@@ -152,15 +170,11 @@ export default {
 
 <style scoped>
 form {
-  padding: 1% 1% 1% 1%;
+  padding: 1%;
   border-radius: 15px;
   background-color: white;
 }
 section {
   margin: 2%;
-}
-.form-row {
-  display: flex;
-  align-items: center;
 }
 </style>

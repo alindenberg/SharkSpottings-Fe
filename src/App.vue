@@ -8,23 +8,27 @@
 </template>
 
 <script>
-import NavBar from "./components/Navbar"
+import NavBar from "./components/Navbar";
 export default {
-  name: 'App',
+  name: "App",
   components: {
     navbar: NavBar
   }
-}
+};
 </script>
 
 <style>
-html, #app {
-  background-color: #80d4ff;
+body {
+  background-image: url("./assets/sharkBackground.jpg");
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   padding-top: 2%;
+}
+/* Google places widget - always bring autocomplete suggestion modal to front */
+.pac-container {
+  z-index: 1051 !important;
 }
 </style>
