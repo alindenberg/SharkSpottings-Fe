@@ -15,11 +15,11 @@
         <b-form-group label="Shark Type:">
           <b-form-group id="shark-type-list">
             <b-form-checkbox
-              v-for="(type, index) in sharkTypes"
+              v-for="(key, index) in sharkTypeMap.keys()"
               :key="index"
               v-model="sharkTypesSelected"
-              :value="type"
-            >{{type}}</b-form-checkbox>
+              :value="key"
+            >{{sharkTypeMap.get(key)}}</b-form-checkbox>
           </b-form-group>
         </b-form-group>
         <!-- CITY FILTER -->
@@ -55,8 +55,8 @@ export default {
   created() {
     for (let key in SharkTypeJson) {
       this.sharkTypeMap.set(key, SharkTypeJson[key]);
+      this.sharkTypes.push(SharkTypeJson[key]);
     }
-    this.sharkTypes.push(...this.sharkTypeMap.values());
   },
   methods: {
     onSubmit(evt) {

@@ -144,7 +144,7 @@ export default {
   },
   created() {
     for (let key in SharkTypeJson) {
-      this.sharkTypes.push(SharkTypeJson[key]);
+      this.sharkTypes.push({ text: SharkTypeJson[key], value: key });
     }
   }
 };

@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import SharkTypeJson from "../assets/sharkTypes.json";
 export default {
   name: "Sighting",
   props: {
@@ -40,7 +41,7 @@ export default {
   },
   computed: {
     title: function() {
-      return this.sighting.sharkDetails.type;
+      return SharkTypeJson[this.sighting.sharkDetails.type];
     },
     subtitle: function() {
       return (
