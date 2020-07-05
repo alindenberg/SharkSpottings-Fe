@@ -1,15 +1,15 @@
 <template>
   <div>
-    <b-btn v-b-toggle.filters>
-      Filters
-      <strong v-if="isCollapsed" aria-hidden="true" class="ml-auto">
+    <b-btn v-show="!isCollapsed" variant="link" v-b-toggle.filters>
+      <b-icon icon="arrow-left"></b-icon>Filters
+      <!-- <strong v-if="isCollapsed" aria-hidden="true" class="ml-auto">
         <b-icon icon="arrow-up"></b-icon>
       </strong>
       <strong v-else aria-hidden="true" class="ml-auto">
         <b-icon icon="arrow-down"></b-icon>
-      </strong>
+      </strong>-->
     </b-btn>
-    <b-collapse v-model="isCollapsed" id="filters">
+    <b-sidebar v-model="isCollapsed" right id="filters">
       <b-form @submit="onSubmit" @reset="onReset">
         <!-- SHARK TYPE FILTER -->
         <b-form-group label="Shark Type:">
@@ -30,11 +30,11 @@
         <!-- SUBMIT -->
         <section id="submit">
           <b-row class="justify-content-center">
-            <b-button type="submit" variant="primary">Submit</b-button>
+            <b-button type="submit" variant="primary">Filter</b-button>
           </b-row>
         </section>
       </b-form>
-    </b-collapse>
+    </b-sidebar>
   </div>
 </template>
 
@@ -80,6 +80,12 @@ export default {
 };
 </script>
 <style scoped>
+.btn {
+  float: right;
+}
+form {
+  margin: 2%;
+}
 #submit {
   margin-top: 2%;
 }
