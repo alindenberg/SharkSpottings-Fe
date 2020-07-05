@@ -40,6 +40,7 @@
 
 <script>
 import Axios from "axios";
+import SharkTypeJson from "../assets/sharkTypes.json";
 export default {
   name: "FilterList",
   data() {
@@ -47,34 +48,32 @@ export default {
       isCollapsed: false,
       cityFilters: [],
       sharkTypes: [],
+      sharkTypeMap: new Map(),
       sharkTypesSelected: []
     };
   },
   created() {
-    Axios.get(`${process.env.VUE_APP_API_URL}/sharkTypes`)
-      .then(res => {
-        this.sharkTypes.push(...res.data);
-      })
-      .catch(err => (this.formError = err));
+    for (let key in SharkTypeJson) {
+      this.sharkTypeMap.set(key, SharkTypeJson[key]);
+    }
+    this.sharkTypes.push(...this.sharkTypeMap.values());
   },
   methods: {
     onSubmit(evt) {
       evt.preventDefault();
 
-      let cityQueryString = "";
+      let queryString = "?";
       if (this.cityFilters.length > 0) {
-        cityQueryString = `?cities=${this.cityFilters.join(",")}`;
+        queryString += `cities=${this.cityFilters.join(",")}&`;
       }
-
-      let sharkTypeQueryString = "";
       if (this.sharkTypesSelected.length > 0) {
-        sharkTypeQueryString = `?sharkTypes=${this.sharkTypesSelected.join(
-          ","
-        )}`;
+        queryString += `sharkTypes=${this.sharkTypesSelected.join(",")}&`;
       }
-      Axios.get(
-        `${process.env.VUE_APP_API_URL}/sightings${cityQueryString}${sharkTypeQueryString}`
-      ).then(res => console.log(res.data));
+      Axios.get(`${process.env.VUE_APP_API_URL}/sightings${queryString}`).then(
+        res => {
+          this.$emit("sightings-updated", res.data);
+        }
+      );
     },
     onReset(evt) {
       evt.preventDefault();

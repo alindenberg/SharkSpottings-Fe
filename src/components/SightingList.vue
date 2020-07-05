@@ -1,28 +1,25 @@
 <template>
   <div>
-    <sighting class="sighting" v-for="(sighting, index) in sightings" :key="index" :sighting="sighting" />
+    <sighting
+      class="sighting"
+      v-for="(sighting, index) in sightings"
+      :key="index"
+      :sighting="sighting"
+    />
   </div>
 </template>
 
 <script>
-import Axios from "axios"
-import Sighting from "./Sighting"
+import Sighting from "./Sighting";
 export default {
   name: "SightingList",
   components: {
     sighting: Sighting
   },
-  data() {
-    return {
-      sightings: []
-    }
-  },
-  created() {
-    Axios.get(`${process.env.VUE_APP_API_URL}/sightings`).then(sightings => {
-        this.sightings.push(...sightings.data)
-    })
+  props: {
+    sightings: Array
   }
-}
+};
 </script>
 
 <style>
