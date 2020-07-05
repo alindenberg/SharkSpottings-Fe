@@ -47,7 +47,6 @@ export default {
     return {
       isCollapsed: false,
       cityFilters: [],
-      sharkTypes: [],
       sharkTypeMap: new Map(),
       sharkTypesSelected: []
     };
@@ -55,7 +54,6 @@ export default {
   created() {
     for (let key in SharkTypeJson) {
       this.sharkTypeMap.set(key, SharkTypeJson[key]);
-      this.sharkTypes.push(SharkTypeJson[key]);
     }
   },
   methods: {
