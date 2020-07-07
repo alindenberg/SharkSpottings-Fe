@@ -26,13 +26,16 @@ export default {
     };
   },
   created() {
-    Axios.get(`${process.env.VUE_APP_API_URL}/sightings`).then(sightings => {
-      this.sightings.push(...sightings.data);
+    this.$auth.getTokenSilently().then(token => {
+      Axios.get(`${process.env.VUE_APP_API_URL}/sightings`, {
+        headers: { Authorization: `Bearer ${token}` }
+      }).then(sightings => {
+        this.sightings.push(...sightings.data);
+      });
     });
   },
   methods: {
     onSightingsUpdated(newList) {
-      console.log("Sightings are updated ", newList);
       this.sightings.splice(0);
       this.sightings.push(...newList);
     }

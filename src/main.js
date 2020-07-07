@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
-import App from './App.vue'
 // Bootstrap CSS
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -10,6 +9,7 @@ import { domain, clientId, audience } from "../auth-config.json";
 import { Auth0Plugin } from "./auth";
 import { authGuard } from './auth/authGuard'
 // Components 
+import App from './App.vue'
 import Profile from './views/Profile'
 import CreateSighting from './views/CreateSighting'
 import ExternalApi from './views/ExternalApi'

@@ -25,11 +25,19 @@
         </b-col>
       </b-row>
     </b-card-text>
-    <!-- <b-link v-if="isAuthor" href="#" class="card-link">Edit Sighting</b-link> -->
+    <b-row class="justify-content-center">
+      <b-modal
+        title="Confirm Delete"
+        v-bind:id="sighting._id"
+        @ok="deleteSighting"
+      >Confirm deletion of sighting?</b-modal>
+      <b-link v-b-modal="sighting._id" v-if="isAuthor">Delete Sighting</b-link>
+    </b-row>
   </b-card>
 </template>
 
 <script>
+import Axios from "axios";
 import SharkTypeJson from "../assets/sharkTypes.json";
 export default {
   name: "Sighting",
@@ -46,10 +54,6 @@ export default {
         " - " +
         this.sighting.sightingDetails.date
       );
-    },
-    isAuthor: function() {
-      // TODO
-      return true;
     }
   },
   methods: {
@@ -63,6 +67,15 @@ export default {
         time = String(time).concat(" AM");
       }
       return time;
+    },
+    async isAuthor() {
+      return (await this.$auth.getTokenSilently()).sub === this.sighting.author;
+    },
+    async deleteSighting() {
+      const token = await this.$auth.getTokenSilently();
+      Axios.delete(`http://localhost:8081/sightings/${this.sighting._id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      }).then(() => this.$emit("sighting-deleted"));
     }
   }
 };

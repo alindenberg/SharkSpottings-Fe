@@ -5,6 +5,7 @@
       v-for="(sighting, index) in sightings"
       :key="index"
       :sighting="sighting"
+      @sighting-deleted="sightingDeleted(index)"
     />
   </div>
 </template>
@@ -18,6 +19,11 @@ export default {
   },
   props: {
     sightings: Array
+  },
+  methods: {
+    sightingDeleted(index) {
+      this.sightings.splice(index, 1);
+    }
   }
 };
 </script>

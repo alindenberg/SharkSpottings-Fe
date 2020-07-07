@@ -93,8 +93,9 @@ export default {
       this.$refs.city.clear();
       this.selectedCity = null;
     },
-    onSubmit(evt) {
+    async onSubmit(evt) {
       evt.preventDefault();
+      const token = await this.$auth.getTokenSilently();
 
       let queryString = "?";
       if (this.cityFilters.length > 0) {
@@ -103,11 +104,11 @@ export default {
       if (this.sharkTypesSelected.length > 0) {
         queryString += `sharkTypes=${this.sharkTypesSelected.join(";")}&`;
       }
-      Axios.get(`${process.env.VUE_APP_API_URL}/sightings${queryString}`).then(
-        res => {
-          this.$emit("sightings-updated", res.data);
-        }
-      );
+      Axios.get(`${process.env.VUE_APP_API_URL}/sightings${queryString}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      }).then(res => {
+        this.$emit("sightings-updated", res.data);
+      });
     },
     onReset(evt) {
       evt.preventDefault();
