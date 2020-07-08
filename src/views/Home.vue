@@ -26,12 +26,8 @@ export default {
     };
   },
   created() {
-    this.$auth.getTokenSilently().then(token => {
-      Axios.get(`${process.env.VUE_APP_API_URL}/sightings`, {
-        headers: { Authorization: `Bearer ${token}` }
-      }).then(sightings => {
-        this.sightings.push(...sightings.data);
-      });
+    Axios.get(`${process.env.VUE_APP_API_URL}/sightings`).then(sightings => {
+      this.sightings.push(...sightings.data);
     });
   },
   methods: {

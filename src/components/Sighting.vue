@@ -31,18 +31,35 @@
         v-bind:id="sighting._id"
         @ok="deleteSighting"
       >Confirm deletion of sighting?</b-modal>
-      <b-link v-b-modal="sighting._id" v-if="isAuthor">Delete Sighting</b-link>
+      <b-link v-b-modal="sighting._id" v-show="isAuthor">Delete Sighting</b-link>
     </b-row>
   </b-card>
 </template>
 
 <script>
+import jwt_decode from "jwt-decode";
 import Axios from "axios";
 import SharkTypeJson from "../assets/sharkTypes.json";
 export default {
   name: "Sighting",
   props: {
     sighting: Object
+  },
+  data() {
+    return {
+      isAuthor: false
+    };
+  },
+  async created() {
+    await this.$auth
+      .getTokenSilently()
+      .then(token => {
+        token = jwt_decode(token);
+        this.isAuthor = token.sub === this.sighting.author;
+      })
+      .catch(() => {
+        this.isAuthor = false;
+      });
   },
   computed: {
     title: function() {
@@ -67,9 +84,6 @@ export default {
         time = String(time).concat(" AM");
       }
       return time;
-    },
-    async isAuthor() {
-      return (await this.$auth.getTokenSilently()).sub === this.sighting.author;
     },
     async deleteSighting() {
       const token = await this.$auth.getTokenSilently();
