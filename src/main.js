@@ -19,7 +19,7 @@ let router = new VueRouter({
   mode: 'history',
   routes: [
     { path: "/", component: Home },
-    { path: "/create-sighting", component: CreateSighting },
+    { path: "/create-sighting", component: CreateSighting, beforeEnter: authGuard },
     { path: "/profile", component: Profile, beforeEnter: authGuard },
     { path: "/external-api", component: ExternalApi, beforeEnter: authGuard }
   ]
