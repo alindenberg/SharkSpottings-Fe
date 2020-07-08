@@ -101,7 +101,7 @@
 </template>
 
 <script>
-import Axios from "axios";
+import { createSighting } from "../services/sightingService";
 import VueGoogleAutocomplete from "vue-google-autocomplete";
 import SharkTypeJson from "../assets/sharkTypes.json";
 export default {
@@ -134,12 +134,11 @@ export default {
     async onSubmit(evt) {
       evt.preventDefault();
 
-      const token = await this.$auth.getTokenSilently();
-
-      Axios.post(`${process.env.VUE_APP_API_URL}/sightings`, this.form, {
-        headers: { Authorization: `Bearer ${token}` }
-      }).catch(err => (this.formError = err));
-
+      await this.$auth.getTokenSilently().then(async token => {
+        await createSighting(this.form, token).catch(
+          err => (this.formError = err)
+        );
+      });
       this.$router.push("/");
     },
     onReset(evt) {

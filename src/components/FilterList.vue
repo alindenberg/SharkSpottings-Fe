@@ -16,14 +16,6 @@
             >{{sharkTypeMap.get(key)}}</b-form-checkbox>
           </b-form-group>
         </b-form-group>
-        <!-- CITY FILTER -->
-        <!-- <b-form-group label="City:"> -->
-        <!-- <b-form-tags
-            placeholder="Enter city search string"
-            input-id="city-filters"
-            v-model="cityFilters"
-            class="mb-2"
-        ></b-form-tags>-->
         <b-form-group label="City:" label-for="shark-city-input">
           <b-row class="align-items-center">
             <b-col sm="10">
@@ -62,9 +54,9 @@
 </template>
 
 <script>
-import Axios from "axios";
 import VueGoogleAutocomplete from "vue-google-autocomplete";
 import SharkTypeJson from "../assets/sharkTypes.json";
+import { getAllSightings } from "../services/sightingService";
 export default {
   name: "FilterList",
   components: {
@@ -95,20 +87,17 @@ export default {
     },
     async onSubmit(evt) {
       evt.preventDefault();
-      const token = await this.$auth.getTokenSilently();
 
-      let queryString = "?";
+      let queryString = "";
       if (this.cityFilters.length > 0) {
         queryString += `cities=${this.cityFilters.join(";")}&`;
       }
       if (this.sharkTypesSelected.length > 0) {
         queryString += `sharkTypes=${this.sharkTypesSelected.join(";")}&`;
       }
-      Axios.get(`${process.env.VUE_APP_API_URL}/sightings${queryString}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      }).then(res => {
-        this.$emit("sightings-updated", res.data);
-      });
+      await getAllSightings(queryString).then(filteredSightings =>
+        this.$emit("sightings-updated", filteredSightings)
+      );
     },
     onReset(evt) {
       evt.preventDefault();

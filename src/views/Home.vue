@@ -11,7 +11,7 @@
   </b-row>
 </template>
 <script>
-import Axios from "axios";
+import { getAllSightings } from "../services/sightingService";
 import FilterList from "../components/FilterList";
 import SightingList from "../components/SightingList";
 export default {
@@ -25,10 +25,10 @@ export default {
       sightings: []
     };
   },
-  created() {
-    Axios.get(`${process.env.VUE_APP_API_URL}/sightings`).then(sightings => {
-      this.sightings.push(...sightings.data);
-    });
+  async created() {
+    await getAllSightings().then(sightings =>
+      this.sightings.push(...sightings)
+    );
   },
   methods: {
     onSightingsUpdated(newList) {
