@@ -1,24 +1,23 @@
 <template>
   <div>
-    <b-btn v-show="!isCollapsed" variant="link" v-b-toggle.filters>
-      <b-icon icon="arrow-left"></b-icon>Filters
-    </b-btn>
-    <b-sidebar v-model="isCollapsed" right id="filters">
-      <b-form @submit="onSubmit" @reset="onReset">
-        <!-- SHARK TYPE FILTER -->
-        <b-form-group label="Shark Type:">
-          <b-form-group id="shark-type-list">
-            <b-form-checkbox
-              v-for="(key, index) in sharkTypeMap.keys()"
-              :key="index"
-              v-model="sharkTypesSelected"
-              :value="key"
-            >{{sharkTypeMap.get(key)}}</b-form-checkbox>
-          </b-form-group>
-        </b-form-group>
-        <b-form-group label="City:" label-for="shark-city-input">
-          <b-row class="align-items-center">
-            <b-col sm="10">
+    <b-card no-body class="mb-1">
+      <b-card-header header-tag="header" class="p-1" role="tab">
+        <b-button block v-b-toggle.filters variant="info">Show Filters</b-button>
+      </b-card-header>
+      <b-collapse id="filters" accordion="my-accordion" role="tabpanel">
+        <b-card-body>
+          <b-form @submit="onSubmit" @reset="onReset">
+            <b-form-group label="Shark Type:">
+              <b-row class="justify-content-center">
+                <b-col sm="5" v-for="(key, index) in sharkTypeMap.keys()" :key="index">
+                  <b-form-checkbox
+                    v-model="sharkTypesSelected"
+                    :value="key"
+                  >{{sharkTypeMap.get(key)}}</b-form-checkbox>
+                </b-col>
+              </b-row>
+            </b-form-group>
+            <b-form-group label="City:" label-for="shark-city-input">
               <google-places
                 class="autocomplete form-control"
                 types="(cities)"
@@ -28,28 +27,24 @@
                 placeholder="Enter a city"
                 v-on:placechanged="onPlaceChanged"
               />
-            </b-col>
-            <b-col sm="1">
-              <b-icon icon="plus-circle" @click="onCityAdded" />
-            </b-col>
-          </b-row>
-        </b-form-group>
-        <section>
-          <b-row class="justify-content-center" id="cityFilters">
-            <b-btn size="sm" id="cityTagBtn" v-for="(city, index) in cityFilters" :key="index">
-              {{city}}
-              <b-icon @click="cityFilters.splice(index, 1)" icon="x-circle" />
-            </b-btn>
-          </b-row>
-        </section>
-        <!-- SUBMIT -->
-        <section id="submit">
-          <b-row class="justify-content-center">
-            <b-button type="submit" variant="primary">Filter</b-button>
-          </b-row>
-        </section>
-      </b-form>
-    </b-sidebar>
+            </b-form-group>
+            <section>
+              <b-row class="justify-content-center" id="cityFilters">
+                <b-btn size="sm" id="cityTagBtn" v-for="(city, index) in cityFilters" :key="index">
+                  {{city}}
+                  <b-icon @click="cityFilters.splice(index, 1)" icon="x-circle" />
+                </b-btn>
+              </b-row>
+            </section>
+            <section id="submit">
+              <b-row class="justify-content-center">
+                <b-button type="submit" variant="primary">Filter</b-button>
+              </b-row>
+            </section>
+          </b-form>
+        </b-card-body>
+      </b-collapse>
+    </b-card>
   </div>
 </template>
 
@@ -77,14 +72,12 @@ export default {
   },
   methods: {
     onPlaceChanged(address) {
-      this.selectedCity =
+      let selectedCity =
         address.locality + ", " + address.administrative_area_level_1;
-    },
-    onCityAdded() {
-      this.cityFilters.push(this.selectedCity);
+      this.cityFilters.push(selectedCity);
       this.$refs.city.clear();
-      this.selectedCity = null;
     },
+    onCityAdded() {},
     async onSubmit(evt) {
       evt.preventDefault();
 
@@ -106,15 +99,12 @@ export default {
 };
 </script>
 <style scoped>
-.btn {
-  float: right;
-}
 form {
   margin: 2%;
   overflow: hidden;
 }
-#submit {
-  margin-top: 2%;
+.card-body {
+  padding: 0;
 }
 #cityTagBtn {
   margin: 1%;

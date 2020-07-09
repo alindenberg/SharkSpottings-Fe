@@ -1,11 +1,16 @@
 <template>
   <div>
+    <filter-list
+      id="filter-list"
+      @sightings-updated="onSightingsUpdated"
+      v-if="sightings.length > 0"
+    ></filter-list>
     <sighting
       class="sighting"
       v-for="(sighting, index) in sightings"
       :key="index"
       :sighting="sighting"
-      @sighting-deleted="sightingDeleted(index)"
+      @sighting-deleted="onSightingDeleted(index)"
     />
     <b-row v-if="sightings.length === 0" id="emptyList" class="justify-content-center">
       <b-col class="text-center">
@@ -17,25 +22,32 @@
 </template>
 
 <script>
+import FilterList from "./FilterList";
 import Sighting from "./Sighting";
 export default {
   name: "SightingList",
   components: {
+    "filter-list": FilterList,
     sighting: Sighting
   },
   props: {
     sightings: Array
   },
   methods: {
-    sightingDeleted(index) {
+    onSightingDeleted(index) {
       this.sightings.splice(index, 1);
+    },
+    onSightingsUpdated(newList) {
+      this.sightings.splice(0);
+      this.sightings.push(...newList);
     }
   }
 };
 </script>
 
 <style>
-.sighting {
+.sighting,
+#filter-list {
   margin-bottom: 2%;
 }
 #emptyList {
