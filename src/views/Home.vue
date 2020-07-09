@@ -1,11 +1,11 @@
 <template>
   <!-- Check that the SDK client is not currently loading before accessing is methods -->
   <b-row v-if="!$auth.loading" id="home">
-    <b-col sm="3"></b-col>
-    <b-col sm="6">
+    <b-col md="2" sm="3"></b-col>
+    <b-col md="8" sm="6">
       <sighting-list :sightings="sightings" />
     </b-col>
-    <b-col sm="3">
+    <b-col md="2" sm="3">
       <filter-list @sightings-updated="onSightingsUpdated" />
     </b-col>
   </b-row>
