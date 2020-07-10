@@ -1,11 +1,16 @@
 <template>
   <div id="nav">
-    <router-link to="/">Home</router-link>
-    <router-link to="/create-sighting">Create Sighting</router-link>
-    <router-link to="/profile" v-if="$auth.isAuthenticated">Profile</router-link>
-    <router-link to="/external-api">External Api</router-link>
-    <a href class="auth" v-if="!$auth.isAuthenticated" @click="login">Login</a>
-    <a href class="auth" v-if="$auth.isAuthenticated" @click="logout">Logout</a>
+    <b-nav pills>
+      <b-nav-item :active="$route.path == '/'" to="/">Home</b-nav-item>
+      <b-nav-item :active="$route.path == '/create-sighting'" to="/create-sighting">Create Sighting</b-nav-item>
+      <b-nav-item
+        :active="$route.path == '/profile'"
+        to="/profile"
+        v-if="$auth.isAuthenticated"
+      >Profile</b-nav-item>
+      <b-nav-item class="ml-auto" v-if="!$auth.isAuthenticated" @click="login">Login</b-nav-item>
+      <b-nav-item class="ml-auto" v-if="$auth.isAuthenticated" @click="logout">Logout</b-nav-item>
+    </b-nav>
   </div>
 </template>
 
@@ -28,14 +33,6 @@ export default {
 <style scoped>
 #nav {
   background-color: whitesmoke;
-  padding-top: 1%;
-  padding-bottom: 1%;
-}
-a {
-  margin-left: 2%;
-}
-.auth {
-  float: right;
-  margin-right: 2%;
+  padding: 0.5%;
 }
 </style>

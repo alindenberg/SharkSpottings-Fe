@@ -2,9 +2,9 @@
   <div>
     <b-card no-body class="mb-1">
       <b-card-header header-tag="header" class="p-1" role="tab">
-        <b-button block v-b-toggle.filters variant="info">Show Filters</b-button>
+        <b-button block v-b-toggle.filters variant="info">{{isCollapsed ? 'Hide' : 'Show'}} Filters</b-button>
       </b-card-header>
-      <b-collapse id="filters" accordion="my-accordion" role="tabpanel">
+      <b-collapse id="filters" v-model="isCollapsed" role="tabpanel">
         <b-card-body>
           <b-form @submit="onSubmit" @reset="onReset">
             <b-form-group label="Shark Type:">
@@ -22,23 +22,24 @@
                 class="autocomplete form-control"
                 types="(cities)"
                 country="us"
-                ref="city"
+                ref="cityAutocomplete"
                 id="autocomplete"
-                placeholder="Enter a city"
+                placeholder="Search by a specific city"
                 v-on:placechanged="onPlaceChanged"
               />
             </b-form-group>
-            <section>
+            <!-- <section>
               <b-row class="justify-content-center" id="cityFilters">
                 <b-btn size="sm" id="cityTagBtn" v-for="(city, index) in cityFilters" :key="index">
                   {{city}}
-                  <b-icon @click="cityFilters.splice(index, 1)" icon="x-circle" />
+                  <b-icon @click="cityDeleted(index)" icon="x-circle" />
                 </b-btn>
               </b-row>
-            </section>
+            </section>-->
             <section id="submit">
               <b-row class="justify-content-center">
-                <b-button type="submit" variant="primary">Filter</b-button>
+                <b-button type="submit" variant="link">Search</b-button>
+                <b-button type="reset" variant="link">Clear</b-button>
               </b-row>
             </section>
           </b-form>
@@ -60,7 +61,7 @@ export default {
   data() {
     return {
       isCollapsed: false,
-      cityFilters: [],
+      selectedCity: null,
       sharkTypeMap: new Map(),
       sharkTypesSelected: []
     };
@@ -72,18 +73,18 @@ export default {
   },
   methods: {
     onPlaceChanged(address) {
-      let selectedCity =
+      this.selectedCity =
         address.locality + ", " + address.administrative_area_level_1;
-      this.cityFilters.push(selectedCity);
-      this.$refs.city.clear();
     },
-    onCityAdded() {},
     async onSubmit(evt) {
       evt.preventDefault();
 
       let queryString = "";
-      if (this.cityFilters.length > 0) {
-        queryString += `cities=${this.cityFilters.join(";")}&`;
+      // if (this.cityFilters.length > 0) {
+      //   queryString += `cities=${this.cityFilters.join(";")}&`;
+      // }
+      if (this.selectedCity !== null) {
+        queryString += `cities=${this.selectedCity}&`;
       }
       if (this.sharkTypesSelected.length > 0) {
         queryString += `sharkTypes=${this.sharkTypesSelected.join(";")}&`;
@@ -92,8 +93,14 @@ export default {
         this.$emit("sightings-updated", filteredSightings)
       );
     },
-    onReset(evt) {
+    async onReset(evt) {
       evt.preventDefault();
+      this.sharkTypesSelected.splice(0);
+      this.selectedCity = null;
+      this.$refs.cityAutocomplete.clear();
+      await getAllSightings().then(sightings =>
+        this.$emit("sightings-updated", sightings)
+      );
     }
   }
 };
@@ -106,7 +113,7 @@ form {
 .card-body {
   padding: 0;
 }
-#cityTagBtn {
-  margin: 1%;
+#submit {
+  margin-bottom: 1%;
 }
 </style>

@@ -1,10 +1,6 @@
 <template>
   <div>
-    <filter-list
-      id="filter-list"
-      @sightings-updated="onSightingsUpdated"
-      v-if="sightings.length > 0"
-    ></filter-list>
+    <filter-list id="filter-list" @sightings-updated="onSightingsUpdated"></filter-list>
     <sighting
       class="sighting"
       v-for="(sighting, index) in sightings"
@@ -51,7 +47,7 @@ export default {
   margin-bottom: 2%;
 }
 #emptyList {
-  margin: 15% 2% 0% 2%;
+  margin: 2% 0% 2%;
   padding: 10%;
   background-color: white;
   border-radius: 15px;
