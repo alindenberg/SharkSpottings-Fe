@@ -1,5 +1,5 @@
 <template>
-  <b-card :title="title" :subTitle="subtitle">
+  <b-card class="sighting" :title="title" :subTitle="subtitle">
     <b-card-text>
       <b-row>
         <b-col>

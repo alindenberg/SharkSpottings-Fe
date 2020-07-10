@@ -41,10 +41,13 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .sighting,
 #filter-list {
   margin-bottom: 2%;
+}
+.sighting {
+  box-shadow: 2px 2px 2px 2px grey;
 }
 #emptyList {
   margin: 2% 0% 2%;

@@ -12,7 +12,6 @@ import { authGuard } from './auth/authGuard'
 import App from './App.vue'
 import Profile from './views/Profile'
 import CreateSighting from './views/CreateSighting'
-import ExternalApi from './views/ExternalApi'
 import Home from './views/Home'
 
 let router = new VueRouter({
@@ -21,7 +20,6 @@ let router = new VueRouter({
     { path: "/", component: Home },
     { path: "/create-sighting", component: CreateSighting, beforeEnter: authGuard },
     { path: "/profile", component: Profile, beforeEnter: authGuard },
-    { path: "/external-api", component: ExternalApi, beforeEnter: authGuard }
   ]
 })
 let authOptions = {
