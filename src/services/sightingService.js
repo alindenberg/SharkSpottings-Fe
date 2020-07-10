@@ -6,6 +6,9 @@ function getAllSightings(queryString) {
 function createSighting(data, token) {
   Axios.post(`${process.env.VUE_APP_API_URL}/sightings`, data, authHeaders(token))
 }
+function deleteSighting(sightingId, token) {
+  Axios.delete(`${process.env.VUE_APP_API_URL}/sightings/${sightingId}`, authHeaders(token));
+}
 
 function authHeaders(token) {
   return {
@@ -14,5 +17,6 @@ function authHeaders(token) {
 }
 export {
   getAllSightings,
-  createSighting
+  createSighting,
+  deleteSighting
 }

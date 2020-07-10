@@ -30,7 +30,7 @@
         title="Confirm Delete"
         v-bind:id="sighting._id"
         @ok="deleteSighting"
-      >Confirm deletion of sighting?</b-modal>
+      >Confirm deletion of {{title}} sighting on {{this.sighting.sightingDetails.date}}?</b-modal>
       <b-link v-b-modal="sighting._id" v-show="isAuthor">Delete Sighting</b-link>
     </b-row>
   </b-card>
@@ -38,7 +38,7 @@
 
 <script>
 import jwt_decode from "jwt-decode";
-import Axios from "axios";
+import { deleteSighting } from "../services/sightingService";
 import SharkTypeJson from "../assets/sharkTypes.json";
 export default {
   name: "Sighting",
@@ -86,10 +86,11 @@ export default {
       return time;
     },
     async deleteSighting() {
-      const token = await this.$auth.getTokenSilently();
-      Axios.delete(`http://localhost:8081/sightings/${this.sighting._id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      }).then(() => this.$emit("sighting-deleted"));
+      await this.$auth.getTokenSilently().then(token => {
+        deleteSighting(this.sighting._id, token).then(() =>
+          this.$emit("sighting-deleted")
+        );
+      });
     }
   }
 };
